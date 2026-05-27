@@ -1,5 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- Primary palette -->
+    <color name="primary">#FF0035C5</color>
+    <color name="primary_variant">#FF4648D4</color>
+    <color name="primary_light">#FF0047FF</color>
+    <color name="accent_purple">#FF6B00B8</color>
+
+    <!-- Surfaces -->
+    <color name="background">#FFFBF8FF</color>
+    <color name="surface">#FFFFFFFF</color>
+    <color name="surface_variant">#FFF3F2FF</color>
+
+    <!-- Text -->
+    <color name="on_surface">#FF191B25</color>
+    <color name="text_secondary">#FF747688</color>
+    <color name="text_tertiary">#FF434657</color>
+
+    <!-- Semantic -->
+    <color name="border_color">#FFE2E1F0</color>
+    <color name="error_color">#FFBA1A1A</color>
+    <color name="error_container">#FFFFDAD6</color>
+    <color name="chip_background">#FFDDE1FF</color>
+    <color name="light_purple">#FFF0DBFF</color>
+    <color name="success_green">#FF059669</color>
+
+    <!-- Basic -->
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
 </resources>

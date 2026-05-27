@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Card container style -->
+    <style name="CardContainer">
+        <item name="android:background">@drawable/bg_card</item>
+        <item name="android:elevation">2dp</item>
+    </style>
+
+    <!-- Primary gradient button -->
+    <style name="ButtonPrimary">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">@dimen/button_height</item>
+        <item name="android:background">@drawable/bg_button_gradient</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:paddingHorizontal">@dimen/spacing_xl</item>
+        <item name="android:textSize">@dimen/text_body</item>
+        <item name="android:gravity">center</item>
+    </style>
+
+    <!-- Advanced gradient button (blue-purple) -->
+    <style name="ButtonAdvanced">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">@dimen/button_height</item>
+        <item name="android:background">@drawable/bg_button_gradient_advanced</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:paddingHorizontal">@dimen/spacing_xl</item>
+        <item name="android:textSize">@dimen/text_body</item>
+        <item name="android:gravity">center</item>
+    </style>
+
+    <!-- Section title text -->
+    <style name="TextSectionTitle">
+        <item name="android:textSize">@dimen/text_h3</item>
+        <item name="android:textColor">@color/on_surface</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+    </style>
+
+    <!-- Body text -->
+    <style name="TextBody">
+        <item name="android:textSize">@dimen/text_body</item>
+        <item name="android:textColor">@color/on_surface</item>
+    </style>
+
+    <!-- Caption / secondary text -->
+    <style name="TextCaption">
+        <item name="android:textSize">@dimen/text_small</item>
+        <item name="android:textColor">@color/text_secondary</item>
+    </style>
+
+    <!-- Bottom sheet theme -->
+    <style name="Theme_Demo_BottomSheet" parent="Theme.Demo">
+        <item name="bottomSheetStyle">@style/BottomSheet</item>
+    </style>
+
+    <style name="BottomSheet" parent="Widget.Material3.BottomSheet.Modal">
+        <item name="shapeAppearance">@style/SheetShape</item>
+        <item name="backgroundTint">@color/surface</item>
+    </style>
+
+    <style name="SheetShape" parent="ShapeAppearance.Material3.LargeComponent">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSizeTopLeft">40dp</item>
+        <item name="cornerSizeTopRight">40dp</item>
+    </style>
+
+    <!-- Chip style -->
+    <style name="ChipTag">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:background">@drawable/bg_chip</item>
+        <item name="android:textSize">@dimen/text_small</item>
+        <item name="android:textColor">@color/primary</item>
+        <item name="android:paddingHorizontal">@dimen/spacing_md</item>
+        <item name="android:paddingVertical">4dp</item>
+    </style>
+</resources>

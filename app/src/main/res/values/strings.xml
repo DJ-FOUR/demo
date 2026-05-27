@@ -1,3 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">demo</string>
+    <string name="app_name">AI 学研社</string>
+
+    <!-- Bottom nav -->
+    <string name="nav_home">首页</string>
+    <string name="nav_course">课程</string>
+    <string name="nav_lab">AI 实验室</string>
+    <string name="nav_graph">知识图谱</string>
+    <string name="nav_me">我的</string>
+
+    <!-- Dashboard -->
+    <string name="greeting_morning">早安，学友</string>
+    <string name="greeting_afternoon">午安，学友</string>
+    <string name="greeting_evening">晚安，学友</string>
+    <string name="daily_goal">今日学习目标</string>
+    <string name="mastery_depth">今日掌握深度</string>
+    <string name="vs_yesterday">较昨日</string>
+    <string name="search_hint">搜索学术课题…</string>
+    <string name="analyze">解析</string>
+    <string name="in_progress">进行中</string>
+    <string name="enter_practice">进入练习空间</string>
+    <string name="weak_points_title">待巩固知识点</string>
+    <string name="add_todo_hint">添加新任务…</string>
+
+    <!-- Course -->
+    <string name="submit_answer">提交答案</string>
+    <string name="ai_hint">AI 提示</string>
+    <string name="add_step">增加新证明步骤</string>
+    <string name="erase_doodle">擦除涂鸦</string>
+    <string name="generate_variant">生成变式练习</string>
+    <string name="view_notes">查看讲义</string>
+    <string name="ask_teacher">求助老师</string>
+    <string name="ai_diagnosis">AI 诊断</string>
+    <string name="solution_record">你的解答记录</string>
+    <string name="diagnostic_report">AI 诊断报告</string>
+    <string name="score_tips">提分建议</string>
+
+    <!-- Lab -->
+    <string name="lab_title">AI 智能实验室</string>
+    <string name="lab_subtitle">变式探究空间</string>
+    <string name="deep_analysis">完整深度解析路径</string>
+    <string name="regenerate">重新演变一道新课题</string>
+    <string name="lab_empty_hint">AI 将根据你的薄弱点生成专属变式练习</string>
+    <string name="lab_generate_btn">直接生成逆矩阵变式挑战</string>
+
+    <!-- Graph -->
+    <string name="graph_title">知识图谱诊断</string>
+    <string name="graph_subtitle">知识图谱分析</string>
+    <string name="ai_insights">AI 实时洞察</string>
+    <string name="concept_graph">核心概念关联图</string>
+    <string name="radar_chart">综合能力雷达图</string>
+    <string name="heatmap_title">知识薄弱点热力图</string>
+    <string name="pending_review">待复习错题</string>
+    <string name="weekly_focus">本周专注时长</string>
+
+    <!-- Profile -->
+    <string name="profile_name">学术研究员学友</string>
+    <string name="profile_email">xueyou@ai-academy.cn</string>
+    <string name="study_shortcuts">学习中心快捷路径</string>
+    <string name="about_lab">关于学术实验室</string>
+    <string name="math_challenge">高等数学挑战</string>
+    <string name="english_challenge">英语语法专项</string>
+
+    <!-- Chat -->
+    <string name="chat_title">AI 专属学术导师团</string>
+    <string name="chat_input_hint">输入你的问题…</string>
+    <string name="chat_quick_1">讲解特征值概念</string>
+    <string name="chat_quick_2">伴随矩阵求法</string>
+    <string name="chat_quick_3">混合虚拟语气规则</string>
+    <string name="ai_mentor">AI 助教</string>
+
+    <!-- General -->
+    <string name="start_learning">开启学习之旅</string>
+    <string name="skip">跳过</string>
+    <string name="next">下一步</string>
 </resources>
