@@ -50,3 +50,12 @@ Material 3 DayNight theme with a blue primary palette (`#0035C5`). All colors de
 ### Navigation
 
 `MainActivity` creates a new Fragment instance on each bottom-nav tap and replaces `R.id.fragment_container`. No `Navigation` component or back-stack — just `FragmentTransaction.replace()`. The FAB triggers `ChatBottomSheet`. Cross-tab navigation happens by setting `bottom_nav.selectedItemId`.
+
+## Gotchas & Conventions
+
+- **Coroutines in ViewModels**: Always use `viewModelScope.launch {}`, never `CoroutineScope(Dispatchers.Main + SupervisorJob())`. Manual scopes survive fragment destruction, causing callbacks to fire on dead views. `viewModelScope` auto-cancels when the ViewModel is cleared.
+- **No `lateinit` in ViewModel fields accessed by `onCleared()`**: If a field is only initialized on user action (e.g., `timerRunnable` only set when the user presses play), use nullability (`Runnable?`). `onCleared()` runs regardless of what the user did, so `lateinit` will crash with `UninitializedPropertyAccessException`.
+- **Views inside ScrollView that handle touch**: Custom Views with `onTouchEvent` (like `DrawingCanvasView`) must call `parent.requestDisallowInterceptTouchEvent(true)` on `ACTION_DOWN` to prevent the ScrollView from stealing touch events. Release with `false` on `ACTION_UP`/`ACTION_CANCEL`.
+- **No-scroll pages**: Use `ConstraintLayout` as root (not `ScrollView`) with the action button pinned to the bottom via `layout_constraintBottom_toBottomOf`. Content area gets `layout_height="0dp"` constrained between header and button.
+- **Fragment ↔ ViewModel communication**: Uses a simple `var onDataChanged: (() -> Unit)?` callback pattern rather than LiveData or StateFlow. Set the callback in `onViewCreated`, and the ViewModel invokes it after state changes. This is sufficient for this app's simplicity but don't add it to new ViewModels if migrating to proper reactive patterns later.
+- **Mock AI**: `MockAiService` simulates AI via keyword-matching (chat replies), template-based generation (lab questions), and rule-based scoring (practice diagnosis). All synchronous string manipulation — no network, no API keys, no real ML.
