@@ -8,15 +8,17 @@ import android.widget.EditText
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
-import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
+import com.example.demo.AppViewModelFactory
 import com.example.demo.R
 import com.example.demo.view.DrawingCanvasView
+import com.example.demo.viewmodel.CourseViewModel
 
 class CourseFragment : Fragment() {
 
-    private var stepCount = 0
-    private var isSubmitted = false
+    private lateinit var viewModel: CourseViewModel
+    private val stepInputs = mutableListOf<EditText>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -27,15 +29,25 @@ class CourseFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        viewModel = ViewModelProvider(this, AppViewModelFactory())[CourseViewModel::class.java]
+        viewModel.initDefaultStep()
+
         val stepsContainer = view.findViewById<LinearLayout>(R.id.steps_container)
         val hintPanel = view.findViewById<LinearLayout>(R.id.hint_panel)
         val canvas = view.findViewById<DrawingCanvasView>(R.id.drawing_canvas)
+        val questionText = view.findViewById<TextView>(R.id.question_text)
+        val submitBtn = view.findViewById<TextView>(R.id.submit_btn)
+        val aiHintBtn = view.findViewById<TextView>(R.id.ai_hint_btn)
 
-        // Add first step
-        addStepInput(stepsContainer)
+        // Set question
+        questionText.text = viewModel.questionText
+
+        // Build initial step inputs
+        rebuildStepInputs(stepsContainer)
 
         view.findViewById<TextView>(R.id.add_step_btn).setOnClickListener {
-            addStepInput(stepsContainer)
+            viewModel.addStep()
+            addStepInput(stepsContainer, viewModel.stepContents.size - 1)
         }
 
         view.findViewById<ImageView>(R.id.course_back).setOnClickListener {
@@ -43,28 +55,35 @@ class CourseFragment : Fragment() {
                 ?.selectedItemId = R.id.nav_home
         }
 
-        view.findViewById<TextView>(R.id.ai_hint_btn).setOnClickListener {
-            hintPanel.visibility = if (hintPanel.visibility == View.GONE) View.VISIBLE else View.GONE
+        aiHintBtn.setOnClickListener {
+            if (viewModel.isSubmitted) {
+                // Reset after submission
+                viewModel.reset()
+                stepInputs.clear()
+                stepsContainer.removeAllViews()
+                rebuildStepInputs(stepsContainer)
+                submitBtn.text = getString(R.string.submit_answer)
+                aiHintBtn.text = getString(R.string.ai_hint)
+                questionText.text = viewModel.questionText
+                hintPanel.visibility = View.GONE
+            } else {
+                hintPanel.visibility = if (hintPanel.visibility == View.GONE) View.VISIBLE else View.GONE
+            }
         }
 
-        view.findViewById<TextView>(R.id.submit_btn).setOnClickListener {
-            if (!isSubmitted) {
-                isSubmitted = true
-                Toast.makeText(requireContext(), "答案已提交，AI 正在诊断…", Toast.LENGTH_SHORT).show()
+        submitBtn.setOnClickListener {
+            if (!viewModel.isSubmitted) {
+                // Sync step inputs to ViewModel
+                for (i in stepInputs.indices) {
+                    viewModel.updateStep(i, stepInputs[i].text.toString().trim())
+                }
+                val session = viewModel.submit()
 
-                // Simulate switching to diagnostic view
-                view.findViewById<TextView>(R.id.submit_btn).text = "查看诊断报告"
-                view.findViewById<TextView>(R.id.ai_hint_btn).text = "重新作答"
+                submitBtn.text = "查看诊断报告"
+                aiHintBtn.text = "重新作答"
 
-                val questionText = view.findViewById<TextView>(R.id.question_text)
-                questionText.text = """
-                    |你的解答已提交 ✓
-                    |
-                    |AI 正在分析你的解题步骤…
-                    |请稍候查看完整诊断报告。
-                """.trimMargin()
-            } else {
-                Toast.makeText(requireContext(), "诊断报告功能开发中…", Toast.LENGTH_SHORT).show()
+                // Show diagnosis in question text area
+                questionText.text = session.diagnosis
             }
         }
 
@@ -73,8 +92,15 @@ class CourseFragment : Fragment() {
         }
     }
 
-    private fun addStepInput(container: LinearLayout) {
-        stepCount++
+    private fun rebuildStepInputs(container: LinearLayout) {
+        container.removeAllViews()
+        stepInputs.clear()
+        for (i in viewModel.stepContents.indices) {
+            addStepInput(container, i)
+        }
+    }
+
+    private fun addStepInput(container: LinearLayout, index: Int) {
         val stepLayout = LinearLayout(requireContext()).apply {
             orientation = LinearLayout.HORIZONTAL
             layoutParams = LinearLayout.LayoutParams(
@@ -84,7 +110,7 @@ class CourseFragment : Fragment() {
         }
 
         val label = TextView(requireContext()).apply {
-            text = "步骤 $stepCount"
+            text = "步骤 ${index + 1}"
             textSize = 12f
             setTextColor(resources.getColor(R.color.text_secondary, null))
             layoutParams = LinearLayout.LayoutParams(
@@ -103,11 +129,15 @@ class CourseFragment : Fragment() {
                 LinearLayout.LayoutParams.WRAP_CONTENT,
                 1f
             )
+            if (index < viewModel.stepContents.size) {
+                setText(viewModel.stepContents[index])
+            }
         }
 
         stepLayout.addView(label)
         stepLayout.addView(input)
         container.addView(stepLayout)
+        stepInputs.add(input)
     }
 
     private val Int.dpToPx: Int

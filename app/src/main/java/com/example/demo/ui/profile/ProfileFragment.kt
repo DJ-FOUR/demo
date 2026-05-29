@@ -4,11 +4,15 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
+import com.example.demo.AppViewModelFactory
 import com.example.demo.R
+import com.example.demo.viewmodel.ProfileViewModel
 
 class ProfileFragment : Fragment() {
+
+    private lateinit var viewModel: ProfileViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -19,7 +23,9 @@ class ProfileFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // The profile page is mostly static display.
-        // Future: wire up settings, edit profile, etc.
+        viewModel = ViewModelProvider(this, AppViewModelFactory())[ProfileViewModel::class.java]
+
+        // Profile page is mostly static from XML layout.
+        // ViewModel provides data for future dynamic updates (edit profile, stats refresh, etc.)
     }
 }

@@ -1,247 +1,233 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background">
+    android:background="@color/background"
+    android:padding="@dimen/spacing_md">
 
+    <!-- Header -->
     <LinearLayout
-        android:layout_width="match_parent"
+        android:id="@+id/lab_header"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="@dimen/spacing_lg"
-        android:paddingBottom="@dimen/fab_margin_bottom">
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
-        <!-- Header -->
+        <ImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/ic_flask" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/spacing_sm"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/lab_title"
+                android:textColor="@color/on_surface"
+                android:textSize="@dimen/text_h3"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/lab_subtitle"
+                android:textColor="@color/text_secondary"
+                android:textSize="@dimen/text_caption" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- Loading state -->
+    <LinearLayout
+        android:id="@+id/lab_loading"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ProgressBar
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:indeterminateTint="@color/primary" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_sm"
+            android:text="AI 正在生成变式练习…"
+            android:textColor="@color/text_secondary"
+            android:textSize="@dimen/text_small" />
+    </LinearLayout>
+
+    <!-- Content -->
+    <LinearLayout
+        android:id="@+id/lab_content"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toTopOf="@id/regenerate_btn"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/lab_header">
+
+        <!-- Card 1: Question + Hint -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
-
-            <ImageView
-                android:layout_width="28dp"
-                android:layout_height="28dp"
-                android:src="@drawable/ic_flask" />
+            android:layout_marginTop="@dimen/spacing_sm"
+            android:background="@drawable/bg_card"
+            android:orientation="vertical"
+            android:padding="@dimen/spacing_md">
 
             <LinearLayout
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/spacing_md"
-                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    style="@style/ChipTag"
+                    android:text="变式探究" />
+
+                <TextView
+                    style="@style/ChipTag"
+                    android:layout_marginStart="6dp"
+                    android:background="@drawable/bg_error_badge"
+                    android:text="进阶" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/lab_question_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_sm"
+                android:text="变式: 三维矩阵逆变换"
+                android:textColor="@color/on_surface"
+                android:textSize="@dimen/text_body"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/lab_question_content"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_xs"
+                android:background="@drawable/bg_card_tinted"
+                android:fontFamily="monospace"
+                android:lineSpacingExtra="2dp"
+                android:padding="@dimen/spacing_sm"
+                android:text="已知三维矩阵 B = [[1, 0, 1], [0, 2, 0], [1, 0, 1]]，求 B 的逆矩阵。"
+                android:textColor="@color/text_tertiary"
+                android:textSize="@dimen/text_small" />
+
+            <TextView
+                android:id="@+id/lab_hint"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_xs"
+                android:background="@drawable/bg_card_tinted"
+                android:padding="@dimen/spacing_sm"
+                android:text="利用分块矩阵思想，将三维矩阵分解为二维和标量部分分别处理。"
+                android:textColor="@color/primary"
+                android:textSize="@dimen/text_small" />
+        </LinearLayout>
+
+        <!-- Card 2: Deep analysis -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_sm"
+            android:background="@drawable/bg_card"
+            android:orientation="vertical"
+            android:padding="@dimen/spacing_md">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/deep_analysis"
+                android:textColor="@color/text_secondary"
+                android:textSize="@dimen/text_small"
+                android:textStyle="bold" />
+
+            <LinearLayout
+                android:id="@+id/analysis_steps_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_xs"
                 android:orientation="vertical">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/lab_title"
+                    android:text="计算 det(B) = 0，B 为奇异矩阵，不可逆。"
                     android:textColor="@color/on_surface"
-                    android:textSize="@dimen/text_h2"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/lab_subtitle"
-                    android:textColor="@color/text_secondary"
                     android:textSize="@dimen/text_small" />
             </LinearLayout>
         </LinearLayout>
-
-        <!-- Loading state -->
-        <LinearLayout
-            android:id="@+id/lab_loading"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/spacing_2xl"
-            android:gravity="center"
-            android:orientation="vertical">
-
-            <ProgressBar
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:indeterminateTint="@color/primary" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/spacing_lg"
-                android:text="AI 正在生成变式练习…"
-                android:textColor="@color/text_secondary"
-                android:textSize="@dimen/text_body" />
-        </LinearLayout>
-
-        <!-- Variant content (initially visible as loaded state) -->
-        <LinearLayout
-            android:id="@+id/lab_content"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/spacing_lg">
-
-            <!-- Variant question card -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/bg_card"
-                android:orientation="vertical"
-                android:padding="@dimen/spacing_lg">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        style="@style/ChipTag"
-                        android:text="变式探究" />
-
-                    <TextView
-                        style="@style/ChipTag"
-                        android:layout_marginStart="8dp"
-                        android:background="@drawable/bg_error_badge"
-                        android:text="进阶" />
-                </LinearLayout>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/spacing_md"
-                    android:text="变式: 三维矩阵逆变换"
-                    android:textColor="@color/on_surface"
-                    android:textSize="@dimen/text_h3"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/spacing_md"
-                    android:background="@drawable/bg_card_tinted"
-                    android:fontFamily="monospace"
-                    android:lineSpacingExtra="4dp"
-                    android:padding="@dimen/spacing_md"
-                    android:text="已知三维矩阵 B = [[1, 0, 1], [0, 2, 0], [1, 0, 1]]，\n求 B 的逆矩阵，并分析其几何意义。"
-                    android:textColor="@color/text_tertiary"
-                    android:textSize="@dimen/text_body" />
-            </LinearLayout>
-
-            <!-- Solution strategy -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/spacing_lg"
-                android:background="@drawable/bg_card"
-                android:orientation="vertical"
-                android:padding="@dimen/spacing_lg">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="解题策略提示"
-                    style="@style/TextSectionTitle" />
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/spacing_sm"
-                    android:background="@color/success_green"
-                    android:backgroundTint="#FF059669"
-                    android:padding="@dimen/spacing_md"
-                    android:text="利用分块矩阵思想，将三维矩阵分解为二维和标量部分分别处理。"
-                    android:textColor="@color/surface"
-                    android:textSize="@dimen/text_body" />
-            </LinearLayout>
-
-            <!-- Deep analysis path -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/spacing_lg"
-                android:background="@drawable/bg_card"
-                android:orientation="vertical"
-                android:padding="@dimen/spacing_lg">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/deep_analysis"
-                    style="@style/TextSectionTitle" />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/spacing_md"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Step 1: 计算 det(B) = 1×2×1 + 0×0×1 + 1×0×0 - 1×2×1 - 0×0×1 - 1×0×1 = 2 - 2 = 0"
-                        android:textColor="@color/error_color"
-                        android:textSize="@dimen/text_body" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/spacing_md"
-                        android:text="Step 2: 发现 B 是奇异矩阵，不存在逆矩阵。\n此题考察对可逆条件的判断。"
-
-                        android:textColor="@color/on_surface"
-                        android:textSize="@dimen/text_body" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/spacing_md"
-                        android:text="Step 3: 从几何角度，B 将三维空间映射到二维平面，不可逆。"
-                        android:textColor="@color/on_surface"
-                        android:textSize="@dimen/text_body" />
-                </LinearLayout>
-            </LinearLayout>
-        </LinearLayout>
-
-        <!-- Empty state (initially hidden) -->
-        <LinearLayout
-            android:id="@+id/lab_empty"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/spacing_2xl"
-            android:gravity="center"
-            android:orientation="vertical"
-            android:visibility="gone">
-
-            <ImageView
-                android:layout_width="64dp"
-                android:layout_height="64dp"
-                android:alpha="0.4"
-                android:src="@drawable/ic_flask" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/spacing_lg"
-                android:text="@string/lab_empty_hint"
-                android:textColor="@color/text_secondary"
-                android:textSize="@dimen/text_body" />
-
-            <TextView
-                android:id="@+id/generate_btn"
-                android:layout_width="wrap_content"
-                android:layout_height="@dimen/button_height"
-                android:layout_marginTop="@dimen/spacing_xl"
-                android:gravity="center"
-                android:text="@string/lab_generate_btn"
-                style="@style/ButtonAdvanced" />
-        </LinearLayout>
-
-        <!-- Regenerate button -->
-        <TextView
-            android:id="@+id/regenerate_btn"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/button_height"
-            android:layout_marginTop="@dimen/spacing_xl"
-            android:gravity="center"
-            android:text="@string/regenerate"
-            style="@style/ButtonPrimary" />
-
     </LinearLayout>
-</ScrollView>
+
+    <!-- Empty state -->
+    <LinearLayout
+        android:id="@+id/lab_empty"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:alpha="0.3"
+            android:src="@drawable/ic_flask" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_sm"
+            android:text="@string/lab_empty_hint"
+            android:textColor="@color/text_secondary"
+            android:textSize="@dimen/text_body" />
+
+        <TextView
+            android:id="@+id/generate_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/button_height"
+            android:layout_marginTop="@dimen/spacing_md"
+            android:gravity="center"
+            android:paddingHorizontal="@dimen/spacing_xl"
+            android:text="@string/lab_generate_btn"
+            style="@style/ButtonAdvanced" />
+    </LinearLayout>
+
+    <!-- Regenerate button — pinned to bottom -->
+    <TextView
+        android:id="@+id/regenerate_btn"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/button_height"
+        android:layout_marginBottom="@dimen/spacing_sm"
+        android:gravity="center"
+        android:text="@string/regenerate"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        style="@style/ButtonPrimary" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

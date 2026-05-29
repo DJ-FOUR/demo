@@ -5,11 +5,16 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
+import com.example.demo.AppViewModelFactory
 import com.example.demo.R
 import com.example.demo.view.KnowledgeGraphView
 import com.example.demo.view.RadarChartView
+import com.example.demo.viewmodel.GraphViewModel
 
 class GraphFragment : Fragment() {
+
+    private lateinit var viewModel: GraphViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -20,17 +25,20 @@ class GraphFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        viewModel = ViewModelProvider(this, AppViewModelFactory())[GraphViewModel::class.java]
+
         val graphView = view.findViewById<KnowledgeGraphView>(R.id.knowledge_graph)
         val radarView = view.findViewById<RadarChartView>(R.id.radar_chart)
 
-        // Custom views are already initialized via XML with default data
-        // Graph nodes and radar dimensions can be updated here if needed
+        // Populate views with data from ViewModel
         graphView.post {
-            // Ready
+            graphView.nodes = viewModel.conceptNodes
         }
 
         radarView.post {
-            // Ready
+            radarView.dimensions = viewModel.radarDimensions.map { d ->
+                RadarChartView.Dimension(d.name, d.score)
+            }
         }
     }
 }

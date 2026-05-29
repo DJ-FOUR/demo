@@ -8,8 +8,13 @@ import com.example.demo.R
 import com.example.demo.model.ChatMessage
 
 class ChatMessageAdapter(
-    private val messages: List<ChatMessage>
+    private var messages: List<ChatMessage>
 ) : RecyclerView.Adapter<ChatMessageAdapter.ViewHolder>() {
+
+    fun updateMessages(newMessages: List<ChatMessage>) {
+        messages = newMessages
+        notifyDataSetChanged()
+    }
 
     class ViewHolder(view: android.view.View) : RecyclerView.ViewHolder(view) {
         val content: TextView = view.findViewById(R.id.message_content)

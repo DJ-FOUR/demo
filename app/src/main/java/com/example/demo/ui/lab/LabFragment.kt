@@ -1,20 +1,20 @@
 package com.example.demo.ui.lab
 
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
-import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
+import com.example.demo.AppViewModelFactory
 import com.example.demo.R
+import com.example.demo.viewmodel.LabViewModel
 
 class LabFragment : Fragment() {
 
-    private var isGenerating = false
+    private lateinit var viewModel: LabViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -25,42 +25,66 @@ class LabFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        viewModel = ViewModelProvider(this, AppViewModelFactory())[LabViewModel::class.java]
+
         val loadingView = view.findViewById<LinearLayout>(R.id.lab_loading)
         val contentView = view.findViewById<LinearLayout>(R.id.lab_content)
         val emptyView = view.findViewById<LinearLayout>(R.id.lab_empty)
         val regenerateBtn = view.findViewById<TextView>(R.id.regenerate_btn)
         val generateBtn = view.findViewById<TextView>(R.id.generate_btn)
 
-        // Default: show content
-        showState(View.VISIBLE, View.GONE, View.GONE)
-
-        regenerateBtn.setOnClickListener {
-            if (isGenerating) return@setOnClickListener
-            startGeneration(loadingView, contentView, emptyView)
+        viewModel.onStateChanged = { state ->
+            when (state) {
+                LabViewModel.State.CONTENT -> {
+                    loadingView.visibility = View.GONE
+                    contentView.visibility = View.VISIBLE
+                    emptyView.visibility = View.GONE
+                    updateContent(view)
+                }
+                LabViewModel.State.LOADING -> {
+                    loadingView.visibility = View.VISIBLE
+                    contentView.visibility = View.GONE
+                    emptyView.visibility = View.GONE
+                }
+                LabViewModel.State.EMPTY -> {
+                    loadingView.visibility = View.GONE
+                    contentView.visibility = View.GONE
+                    emptyView.visibility = View.VISIBLE
+                }
+            }
         }
 
-        generateBtn.setOnClickListener {
-            if (isGenerating) return@setOnClickListener
-            startGeneration(loadingView, contentView, emptyView)
+        viewModel.generate()
+
+        regenerateBtn.setOnClickListener { viewModel.generate() }
+        generateBtn.setOnClickListener { viewModel.generate() }
+    }
+
+    private fun updateContent(view: View) {
+        val q = viewModel.currentQuestion ?: return
+
+        view.findViewById<TextView>(R.id.lab_question_title)?.text = "变式: ${q.subject}"
+        view.findViewById<TextView>(R.id.lab_question_content)?.text = q.question
+        view.findViewById<TextView>(R.id.lab_hint)?.text = q.hint
+
+        val stepsContainer = view.findViewById<LinearLayout>(R.id.analysis_steps_container) ?: return
+        stepsContainer.removeAllViews()
+        for (line in viewModel.deepAnalysisText.split("\n")) {
+            if (line.isNotBlank()) {
+                val tv = TextView(requireContext()).apply {
+                    text = line.trim()
+                    textSize = 12f
+                    setTextColor(resources.getColor(R.color.on_surface, null))
+                    layoutParams = LinearLayout.LayoutParams(
+                        LinearLayout.LayoutParams.MATCH_PARENT,
+                        LinearLayout.LayoutParams.WRAP_CONTENT
+                    ).apply { topMargin = 2.dpToPx }
+                }
+                stepsContainer.addView(tv)
+            }
         }
     }
 
-    private fun startGeneration(loading: LinearLayout, content: LinearLayout, empty: LinearLayout) {
-        isGenerating = true
-        showState(View.GONE, View.VISIBLE, View.GONE)
-
-        Handler(Looper.getMainLooper()).postDelayed({
-            isGenerating = false
-            showState(View.VISIBLE, View.GONE, View.GONE)
-            Toast.makeText(requireContext(), "变式练习已生成！", Toast.LENGTH_SHORT).show()
-        }, 2000)
-    }
-
-    private fun showState(contentVis: Int, loadingVis: Int, emptyVis: Int) {
-        view?.let {
-            it.findViewById<LinearLayout>(R.id.lab_content).visibility = contentVis
-            it.findViewById<LinearLayout>(R.id.lab_loading).visibility = loadingVis
-            it.findViewById<LinearLayout>(R.id.lab_empty).visibility = emptyVis
-        }
-    }
+    private val Int.dpToPx: Int
+        get() = (this * resources.displayMetrics.density).toInt()
 }

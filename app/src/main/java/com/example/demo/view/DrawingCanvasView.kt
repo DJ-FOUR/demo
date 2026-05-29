@@ -50,6 +50,7 @@ class DrawingCanvasView @JvmOverloads constructor(
         val y = event.y
         when (event.action) {
             MotionEvent.ACTION_DOWN -> {
+                parent.requestDisallowInterceptTouchEvent(true)
                 currentPath = Path()
                 currentPath.moveTo(x, y)
                 paths.add(currentPath to Paint(paint))
@@ -59,7 +60,8 @@ class DrawingCanvasView @JvmOverloads constructor(
                 currentPath.lineTo(x, y)
                 invalidate()
             }
-            MotionEvent.ACTION_UP -> {
+            MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
+                parent.requestDisallowInterceptTouchEvent(false)
                 currentPath.lineTo(x, y)
                 invalidate()
             }
